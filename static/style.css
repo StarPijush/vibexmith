@@ -26,6 +26,7 @@ body {
   color: var(--text-main);
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {
@@ -39,7 +40,7 @@ p {
 }
 
 /* =====================================================
-   HERO
+   HERO SECTION
 ===================================================== */
 .hero {
   position: relative;
@@ -58,9 +59,7 @@ p {
   inset: 0;
   background:
     linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)),
-    url("https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?auto=format&fit=crop&w=1600&q=80");
-  background-size: cover;
-  background-position: center;
+    url("{{ url_for('static', filename='images/hero-bg.jpg') }}") no-repeat center/cover;
   z-index: -1;
 }
 
@@ -84,7 +83,7 @@ p {
   animation: fadeInHero 1.4s forwards 0.6s;
 }
 
-/* CTA */
+/* CTA BUTTON */
 .btn {
   display: inline-block;
   padding: 16px 42px;
@@ -103,7 +102,7 @@ p {
 }
 
 /* =====================================================
-   EVENT GALLERY (FIXED SIZES)
+   GALLERY SECTION
 ===================================================== */
 .gallery {
   padding: 100px 8%;
@@ -128,7 +127,7 @@ p {
 }
 
 .gallery-item {
-  height: 320px; /* FIXED height for uniformity */
+  height: 320px;
   overflow: hidden;
   border-radius: 18px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.6);
@@ -159,7 +158,7 @@ p {
 .gallery-item:hover::after { opacity: 1; }
 
 /* =====================================================
-   SERVICES (NO DROPPING ISSUE)
+   SERVICES SECTION
 ===================================================== */
 .services {
   padding: 120px 8%;
@@ -172,34 +171,21 @@ p {
 }
 
 .service-box {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(260px, 1fr));
-    gap: 32px;
-    justify-content: center;
-    align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 32px;
+  justify-content: center;
+  align-items: stretch;
 }
 
 .card {
-    padding: 50px 35px;
-    background: rgba(255,255,255,0.035);
-    border: 1px solid #2a2a2a;
-    border-radius: 22px;
-    text-align: center;
-    font-weight: 500;
-    transition: 0.4s ease;
-}
-
-/* Responsive fix */
-@media (max-width: 900px) {
-    .service-box {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 520px) {
-    .service-box {
-        grid-template-columns: 1fr;
-    }
+  padding: 50px 35px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid #2a2a2a;
+  border-radius: 22px;
+  text-align: center;
+  font-weight: 500;
+  transition: 0.4s ease;
 }
 
 .card:hover {
@@ -209,7 +195,7 @@ p {
 }
 
 /* =====================================================
-   TESTIMONIALS
+   TESTIMONIALS SECTION
 ===================================================== */
 .testimonials {
   padding: 90px 8%;
@@ -266,11 +252,14 @@ p {
 }
 
 /* =====================================================
-   CONTACT
+   CONTACT FORM
 ===================================================== */
 .contact {
-  padding: 120px 8%;
+  padding: 120px 8% 220px;
   text-align: center;
+  background: linear-gradient(180deg, rgba(11,11,11,0) 0%, #000 85%);
+  position: relative;
+  z-index: 1;
 }
 
 form {
@@ -298,17 +287,19 @@ button {
   border: none;
   border-radius: 40px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 /* =====================================================
-   FOOTER (FIXED CLASS NAME)
+   FOOTER
 ===================================================== */
 .footer {
-  margin-top: 120px;
-  padding: 40px 20px 25px;
-  background: #000;
+  padding: 50px 20px 30px;
   text-align: center;
+  background: #000;
   border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  z-index: 1;
 }
 
 .footer-tagline {
@@ -322,12 +313,12 @@ button {
 }
 
 /* =====================================================
-   WHATSAPP FLOAT
+   WHATSAPP FLOAT BUTTON
 ===================================================== */
 .whatsapp-float {
   position: fixed;
-  bottom: 22px;
-  right: 22px;
+  bottom: 30px;
+  right: 20px;
   background: linear-gradient(135deg,#25D366,#1ebc5b);
   padding: 14px 20px;
   border-radius: 30px;
@@ -337,292 +328,71 @@ button {
   z-index: 999;
 }
 
+@media (max-width: 520px) {
+  .whatsapp-float { bottom: 90px; right: 18px; transform: scale(0.9); }
+}
+
 /* =====================================================
-   ANIMATIONS & RESPONSIVE
+   ANIMATIONS
 ===================================================== */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInHero { to { opacity: 1; transform: translateY(0); } }
+
+.thank-you-page .bg span {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(199,169,109,0.18), transparent 70%);
+  border-radius: 50%;
+  animation: float 25s infinite ease-in-out;
+}
+.thank-you-page .bg span:nth-child(1) { top: 10%; left: 10%; }
+.thank-you-page .bg span:nth-child(2) { top: 60%; left: 65%; animation-duration: 35s; }
+.thank-you-page .bg span:nth-child(3) { top: 30%; left: 40%; width: 300px; height: 300px; animation-duration: 30s; }
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-50px); }
+  100% { transform: translateY(0); }
 }
 
-@keyframes fadeInHero {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 900px) {
-  .gallery-grid { grid-template-columns: repeat(2,1fr); }
-}
-
-@media (max-width: 520px) {
-  .gallery-grid { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 2.6rem; }
-}
-/* ===== CONTACT SECTION FIX ===== */
-.contact {
-    padding-bottom: 180px; /* creates breathing space */
-}
-
-/* ===== FOOTER HARD SEPARATION ===== */
-.footer {
-    position: relative;
-    margin-top: 120px;
-    padding: 50px 20px 30px;
-    background: #000;
-    text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    z-index: 1;
-}
-
-/* ===== WHATSAPP SAFE POSITION ===== */
-.whatsapp-float {
-    bottom: 30px;
-    right: 20px;
-}
-
-/* Mobile safety */
-@media (max-width: 520px) {
-    .whatsapp-float {
-        bottom: 90px; /* avoids submit button */
-    }
-}
-/* ===============================
-   TABLET / HALF-SCREEN FIX
-   =============================== */
+/* =====================================================
+   RESPONSIVE MEDIA QUERIES
+===================================================== */
 @media (max-width: 1100px) {
-
-  section {
-    padding: 70px 6%;
-  }
-
-  h2 {
-    font-size: 2.2rem;
-    text-align: center;
-  }
-
-  /* SERVICES */
-  .service-box {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .service-box .card {
-    width: 100%;
-    padding: 28px;
-    font-size: 1rem;
-  }
-
-  /* GALLERY */
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-  }
-
-  .gallery-item img {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-  }
-
-  /* EVENT TYPES */
-  .event-types ul {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  /* TESTIMONIALS */
-  .testimonial-box {
-    gap: 28px;
-    padding: 0 20px;
-  }
-
-  /* CONTACT FORM */
-  .contact form {
-    width: 100%;
-    max-width: 520px;
-    margin: 0 auto;
-  }
-
-  /* FOOTER */
-  .footer {
-    padding-bottom: 90px;
-  }
+  section { padding: 70px 6%; }
+  h2 { font-size: 2.2rem; text-align: center; }
+  .service-box { grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 900px; margin: 0 auto; }
+  .service-box .card { padding: 28px; font-size: 1rem; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .gallery-item img { height: 260px; }
+  .event-types ul { grid-template-columns: repeat(2, 1fr); max-width: 700px; margin: auto; }
+  .testimonial-box { gap: 28px; padding: 0 20px; }
+  .contact form { width: 100%; max-width: 520px; margin: auto; }
+  .footer { padding-bottom: 90px; }
 }
 
-/* =====================================================
-   FINAL RESPONSIVE LOCK
-   Desktop (>=1024px) + Mobile (<=768px)
-   No half-screen glitches
-===================================================== */
-
-/* -------- DESKTOP (default behavior) -------- */
-@media (min-width: 1024px) {
-
-  .gallery-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .service-box {
-    grid-template-columns: repeat(3, minmax(260px, 1fr));
-  }
-
-  .event-types ul {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
-
-  .hero h1 {
-    font-size: 3.8rem;
-  }
-}
-
-/* -------- MOBILE ONLY -------- */
 @media (max-width: 768px) {
-
-  /* GLOBAL */
-  section {
-    padding: 70px 6%;
-  }
-
-  h2 {
-    font-size: 2rem;
-  }
-
-  p {
-    font-size: 15px;
-  }
-
-  /* HERO */
-  .hero {
-    min-height: auto;
-    padding: 120px 20px 90px;
-  }
-
-  .hero h1 {
-    font-size: 2.4rem;
-  }
-
-  .hero p {
-    font-size: 1rem;
-    margin-bottom: 36px;
-  }
-
-  /* GALLERY */
-  .gallery-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .gallery-item {
-    height: 240px;
-  }
-
-  /* SERVICES */
-  .service-box {
-    grid-template-columns: 1fr;
-    gap: 22px;
-  }
-
-  .card {
-    padding: 32px 24px;
-  }
-
-  /* TESTIMONIALS */
-  .testimonial-box {
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .testimonial {
-    max-width: 100%;
-  }
-
-  /* EVENT TYPES */
-  .event-types ul {
-    grid-template-columns: 1fr;
-  }
-
-  /* CONTACT */
-  form {
-    padding: 28px;
-  }
-
-  input, textarea {
-    font-size: 16px;
-  }
-
-  /* WHATSAPP SAFE */
-  .whatsapp-float {
-    bottom: 90px;
-    right: 18px;
-    transform: scale(0.9);
-  }
-
-/* =========================================
-   FINAL OVERLAP FIX (ONLY THESE 2 SECTIONS)
-========================================= */
-
-/* FIX 1: SERVICES → TESTIMONIALS GAP */
-.services {
-  margin-bottom: 120px;
+  section { padding: 70px 6%; }
+  h2 { font-size: 2rem; }
+  p { font-size: 15px; }
+  .hero { min-height: auto; padding: 120px 20px 90px; }
+  .hero h1 { font-size: 2.4rem; }
+  .hero p { font-size: 1rem; margin-bottom: 36px; }
+  .gallery-grid { grid-template-columns: 1fr; gap: 20px; }
+  .gallery-item { height: 240px; }
+  .service-box { grid-template-columns: 1fr; gap: 22px; }
+  .card { padding: 32px 24px; }
+  .testimonial-box { flex-direction: column; gap: 24px; }
+  .testimonial { max-width: 100%; }
+  .event-types ul { grid-template-columns: 1fr; }
+  form { padding: 28px; }
+  input, textarea { font-size: 16px; }
 }
-
-.testimonials {
-  position: relative;
-  z-index: 1;
-  padding-top: 120px;
-}
-
-/* FIX 2: CONTACT → FOOTER GAP */
-.contact {
-  position: relative;
-  z-index: 1;
-  padding-bottom: 220px; /* forces footer below form */
-}
-
 
 /* SAFETY FOR SHORT / HALF SCREENS */
 @media (max-height: 700px) {
-
-  .services {
-    margin-bottom: 160px;
-  }
-
-  .testimonials {
-    padding-top: 140px;
-  }
-
-  .contact {
-    padding-bottom: 260px;
-  }
-}
-/* =========================================
-   FINAL END-OF-PAGE VISUAL FIX (ONLY THIS)
-========================================= */
-
-.contact {
-  background: linear-gradient(
-    180deg,
-    rgba(11,11,11,0) 0%,
-    #000 85%
-  );
-}
-
-body {
-  overflow-x: hidden;
-}
-.contact {
-  padding: 120px 8% 140px;
-  text-align: center;
-  background: #000;
-}
-.footer {
-  margin-top: 0;
-
-}
-
+  .services { margin-bottom: 160px; }
+  .testimonials { padding-top: 140px; }
+  .contact { padding-bottom: 260px; }
 }

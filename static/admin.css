@@ -1,3 +1,8 @@
+/* =====================================================
+   VIBEXSMITH ADMIN DASHBOARD – PRODUCTION LEVEL
+   Refined • Responsive • Premium
+===================================================== */
+
 /* ===============================
    GLOBAL RESET
 ================================ */
@@ -7,13 +12,11 @@
     box-sizing: border-box;
 }
 
-/* ===============================
-   ADMIN DASHBOARD BODY (DEFAULT)
-================================ */
 body {
     background: radial-gradient(circle at top, #111 0%, #000 60%);
     font-family: 'Inter', sans-serif;
     color: #eaeaea;
+    overflow-x: hidden;
 }
 
 /* ===============================
@@ -38,6 +41,7 @@ body {
     border-radius: 16px;
     padding: 20px 25px;
     margin-bottom: 30px;
+    animation: fadeIn 0.8s ease forwards;
 }
 
 .admin-header h1 {
@@ -54,20 +58,31 @@ body {
     border: none;
     background: #111;
     color: #fff;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-box:focus {
+    outline: none;
+    border: 1px solid #cfa75e;
+    box-shadow: 0 0 10px rgba(207,167,94,0.35);
 }
 
 .logout-btn {
     text-decoration: none;
     color: #fff;
-    background: linear-gradient(135deg, #7f5af0, #5f2eea);
+    background: linear-gradient(135deg, #cfa75e, #9c7c3f);
     padding: 10px 16px;
     border-radius: 10px;
     font-size: 14px;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
-.logout-btn:hover {
+.logout-btn:hover,
+.logout-btn:focus {
     opacity: 0.85;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(207,167,94,0.35);
+    outline: none;
 }
 
 /* ===============================
@@ -89,12 +104,17 @@ body {
     border-radius: 18px;
     padding: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    transition: 0.3s;
+    transition: 0.4s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardFadeIn 0.8s forwards;
 }
 
-.request-card:hover {
-    transform: translateY(-6px);
-}
+.request-card:nth-child(1) { animation-delay: 0.1s; }
+.request-card:nth-child(2) { animation-delay: 0.2s; }
+.request-card:nth-child(3) { animation-delay: 0.3s; }
+.request-card:nth-child(4) { animation-delay: 0.4s; }
+.request-card:nth-child(5) { animation-delay: 0.5s; }
 
 .card-header {
     display: flex;
@@ -131,20 +151,23 @@ body {
     padding: 6px 12px;
     border-radius: 8px;
     text-decoration: none;
+    transition: all 0.3s ease;
 }
 
 .delete-btn:hover {
     background: rgba(255,77,77,0.15);
+    transform: translateY(-2px);
 }
 
 .empty {
     opacity: 0.6;
     font-size: 15px;
+    text-align: center;
+    padding: 20px 0;
 }
 
 /* ===============================
    PASSWORD PAGE (ISOLATED)
-   USE: <body class="password-page">
 ================================ */
 body.password-page {
     min-height: 100vh;
@@ -154,7 +177,6 @@ body.password-page {
     justify-content: center;
 }
 
-/* Password Box */
 .password-page .luxury-box {
     width: 100%;
     max-width: 420px;
@@ -163,9 +185,9 @@ body.password-page {
     border-radius: 16px;
     text-align: center;
     box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    animation: fadeUp 0.8s ease forwards;
 }
 
-/* Text */
 .password-page h1 {
     font-family: 'Playfair Display', serif;
     font-size: 1.9rem;
@@ -178,7 +200,6 @@ body.password-page {
     margin-bottom: 28px;
 }
 
-/* Inputs */
 .password-page input {
     width: 100%;
     padding: 14px;
@@ -187,25 +208,32 @@ body.password-page {
     border: 1px solid #222;
     background: rgba(255,255,255,0.04);
     color: #fff;
+    transition: border 0.3s, box-shadow 0.3s;
 }
 
-/* Button */
+.password-page input:focus {
+    outline: none;
+    border: 1px solid #cfa75e;
+    box-shadow: 0 0 10px rgba(207,167,94,0.35);
+}
+
 .password-page button {
     width: 100%;
     padding: 14px;
     border-radius: 30px;
-    background: linear-gradient(135deg, #e0c36c, #b48b2c);
+    background: linear-gradient(135deg, #cfa75e, #9c7c3f);
     border: none;
     color: #000;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .password-page button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(207,167,94,0.4);
 }
 
-/* Messages */
 .password-page .error {
     background: rgba(255,60,60,0.15);
     color: #ff6b6b;
@@ -222,10 +250,56 @@ body.password-page {
     margin-bottom: 16px;
 }
 
-/* Back link */
 .password-page .back-link {
     display: inline-block;
     margin-top: 22px;
     color: #c7a14a;
     text-decoration: none;
+    transition: all 0.3s;
 }
+
+.password-page .back-link:hover {
+    color: #e0c36c;
+    transform: translateY(-2px);
+}
+
+/* ===============================
+   ANIMATIONS
+================================ */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===============================
+   RESPONSIVE IMPROVEMENTS
+================================ */
+@media (max-width: 480px) {
+    .request-list {
+        grid-template-columns: 1fr;
+    }
+
+    .password-page .luxury-box {
+        width: 90%;
+        padding: 28px;
+    }
+
+    .admin-header h1 {
+        font-size: 20px;
+    }
+
+    .search-box {
+        margin: 10px 0;
+    }
+}
+

@@ -1,43 +1,59 @@
-from flask import Flask, render_template, request, redirect, url_for, session, abort
+from flask import Flask, render_template, request, redirect, url_for, session, abort, flash
 import json, os
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# ================================
+# Flask App Setup
+# ================================
 app = Flask(__name__)
-app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET"
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET")  # Use env in production
 
-DATA_FILE = "data/requests.json"
-ADMIN_FILE = "data/admin.json"
+DATA_FILE = os.path.join("data", "requests.json")
+ADMIN_FILE = os.path.join("data", "admin.json")
 
 
-# ---------- HELPERS ----------
-def load_requests():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
+# ================================
+# Helper Functions
+# ================================
+def load_json(file_path, default=None):
+    """Generic JSON loader"""
+    if os.path.exists(file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
-    return []
+    return default if default is not None else {}
+
+
+def save_json(file_path, data):
+    """Generic JSON saver"""
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+
+
+def load_requests():
+    return load_json(DATA_FILE, default=[])
 
 
 def save_requests(data):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
+    save_json(DATA_FILE, data)
 
 
 def load_admin():
-    with open(ADMIN_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return load_json(ADMIN_FILE)
 
 
 def save_admin(data):
-    with open(ADMIN_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
+    save_json(ADMIN_FILE, data)
 
 
 def admin_required():
+    """Check if admin is logged in"""
     return session.get("admin_logged_in")
 
 
-# ---------- PUBLIC ----------
+# ================================
+# Public Routes
+# ================================
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -51,8 +67,9 @@ def submit_request():
     message = request.form.get("message")
 
     if not name or not phone or not message:
-        abort(400)
+        abort(400, description="Missing required fields")
 
+    # Save request
     data = load_requests()
     data.append({
         "name": name,
@@ -71,19 +88,21 @@ def thank_you():
     return render_template("thank_you.html")
 
 
-# ---------- AUTH ----------
+# ================================
+# Authentication
+# ================================
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         admin = load_admin()
-        if (
-            request.form["username"] == admin["username"]
-            and check_password_hash(admin["password"], request.form["password"])
-        ):
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+
+        if admin and username == admin.get("username") and check_password_hash(admin.get("password", ""), password):
             session["admin_logged_in"] = True
             return redirect(url_for("admin"))
-
-        return render_template("login.html", error="Invalid credentials")
+        else:
+            return render_template("login.html", error="Invalid credentials")
 
     return render_template("login.html")
 
@@ -94,7 +113,9 @@ def logout():
     return redirect(url_for("login"))
 
 
-# ---------- ADMIN ----------
+# ================================
+# Admin Routes
+# ================================
 @app.route("/admin")
 def admin():
     if not admin_required():
@@ -117,7 +138,9 @@ def delete(index):
     return redirect(url_for("admin"))
 
 
-# ---------- CHANGE PASSWORD ----------
+# ================================
+# Change Password
+# ================================
 @app.route("/change-password", methods=["GET", "POST"])
 def change_password():
     if not admin_required():
@@ -127,11 +150,11 @@ def change_password():
     admin = load_admin()
 
     if request.method == "POST":
-        old = request.form["old_password"]
-        new = request.form["new_password"]
-        confirm = request.form["confirm_password"]
+        old = request.form.get("old_password", "")
+        new = request.form.get("new_password", "")
+        confirm = request.form.get("confirm_password", "")
 
-        if not check_password_hash(admin["password"], old):
+        if not check_password_hash(admin.get("password", ""), old):
             error = "Current password is incorrect"
         elif new != confirm:
             error = "Passwords do not match"
@@ -144,22 +167,11 @@ def change_password():
 
     return render_template("change_password.html", error=error, success=success)
 
-@app.route("/mark-read/<int:index>")
-def mark_read(index):
-    with open("requests.json", "r") as f:
-        data = json.load(f)
 
-    if 0 <= index < len(data):
-        data[index]["status"] = "read"
-
-    with open("requests.json", "w") as f:
-        json.dump(data, f, indent=4)
-
-    return redirect("/admin")
-
-
+# ================================
+# Run App
+# ================================
 if __name__ == "__main__":
-    app.run(debug=True)
-
-
+    # debug=False for production
+    app.run(debug=False, host="0.0.0.0", port=5000)
 

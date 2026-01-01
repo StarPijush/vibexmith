@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VibeXmith Productions</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
@@ -18,42 +20,21 @@
             </div>
         </div>
     </section>
-<!-- EVENT GALLERY -->
-<section class="gallery reveal">
-    <h2>Select Works</h2>
-    <p class="gallery-subtitle">
-        Real moments. Real people. Premium experiences across India.
-    </p>
-    <div class="gallery-grid">
 
-  <div class="gallery-item">
-    <img src="{{ url_for('static', filename='images/gallery1.jpg') }}" alt="Luxury Indian Wedding">
-  </div>
-
-  <div class="gallery-item">
-    <img src="{{ url_for('static', filename='images/gallery2.jpg') }}" alt="Corporate Event">
-  </div>
-
-  <div class="gallery-item">
-    <img src="{{ url_for('static', filename='images/gallery3.jpg') }}" alt="Live Concert Production">
-  </div>
-
-  <div class="gallery-item">
-    <img src="{{ url_for('static', filename='images/gallery4.jpg') }}" alt="Birthday & Private Party">
-  </div>
-
-  <div class="gallery-item">
-    <img src="{{ url_for('static', filename='images/gallery5.jpg') }}" alt="Brand Activation Event">
-  </div>
-
-  <div class="gallery-item">
-    <img src="{{ url_for('static', filename='images/gallery6.jpg') }}" alt="College Fest Event">
-  </div>
-
-  </div>
-</div>  
-</section>
-
+    <!-- EVENT GALLERY -->
+    <section class="gallery reveal">
+        <h2>Select Works</h2>
+        <p class="gallery-subtitle">
+            Real moments. Real people. Premium experiences across India.
+        </p>
+        <div class="gallery-grid">
+            {% for i in range(1, 7) %}
+            <div class="gallery-item">
+                <img src="{{ url_for('static', filename='images/gallery' ~ i ~ '.jpg') }}" alt="Gallery Image {{ i }}">
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 
     <!-- SERVICES SECTION -->
     <section class="services reveal">
@@ -66,32 +47,33 @@
             </div>
         </div>
     </section>
+
+    <!-- TESTIMONIALS -->
     <section class="testimonials reveal">
-    <h2>What Our Clients Say</h2>
-
-    <div class="testimonial-box">
-        <div class="testimonial">
-            <p>“VibeXmith turned our wedding into a cinematic experience.”</p>
-            <span>— Aman & Riya</span>
+        <h2>What Our Clients Say</h2>
+        <div class="testimonial-box">
+            <div class="testimonial">
+                <p>“VibeXmith turned our wedding into a cinematic experience.”</p>
+                <span>— Aman & Riya</span>
+            </div>
+            <div class="testimonial">
+                <p>“Professional, creative, and flawless execution.”</p>
+                <span>— Corporate Client</span>
+            </div>
         </div>
-
-        <div class="testimonial">
-            <p>“Professional, creative, and flawless execution.”</p>
-            <span>— Corporate Client</span>
-        </div>
-    </div>
     </section>
 
+    <!-- EVENT TYPES -->
     <section class="event-types reveal">
-    <h2>Events We Specialize In</h2>
-    <ul>
-        <li>Luxury Weddings</li>
-        <li>Birthday & Private Parties</li>
-        <li>Product Launches</li>
-        <li>College Fests & Concerts</li>
-        <li>Brand Activations</li>
-        <li>Corporate & VIP Events </li>
-    </ul>
+        <h2>Events We Specialize In</h2>
+        <ul>
+            <li>Luxury Weddings</li>
+            <li>Birthday & Private Parties</li>
+            <li>Product Launches</li>
+            <li>College Fests & Concerts</li>
+            <li>Brand Activations</li>
+            <li>Corporate & VIP Events</li>
+        </ul>
     </section>
 
     <!-- CONTACT SECTION -->
@@ -99,19 +81,15 @@
         <div class="parallax-layer">
             <h2>Contact Us</h2>
             <form action="/submit" method="POST">
-               <input type="text" name="name" placeholder="Your Name" required>
-               <input type="tel"
-                      name="phone"
-                      placeholder="Phone Number"
-                      pattern="[0-9]{10}"
-                      required>
-               <input type="email" name="email" placeholder="Your Email" required>
-               <input type="hidden" name="source" value="website">
-               <input type="hidden" name="timestamp" value="{{ time }}">
-               <textarea name="message" placeholder="Your Message" required></textarea>
-               <button type="submit">Send Request</button>
-            </form>    
-           <!-- Flash messages for Flask -->
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="tel" name="phone" placeholder="Phone Number" pattern="[0-9]{10}" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <input type="hidden" name="source" value="website">
+                <input type="hidden" name="timestamp" value="{{ time }}">
+                <textarea name="message" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Request</button>
+            </form>
+
             {% if messages %}
             <div class="flash-message success">
                {% for message in messages %}
@@ -122,11 +100,11 @@
         </div>
     </section>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
     <a href="https://wa.me/918617080725" class="whatsapp-float" target="_blank">
-    Chat on WhatsApp
+        Chat on WhatsApp
     </a>
 </body>
 </html>
-
 
