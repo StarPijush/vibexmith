@@ -1,24 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeXsmith Productions</title>
+    <meta charset="UTF-8">
+    <title>VibeXmith Admin Panel</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
 </head>
 <body>
 
-<section class="hero">
-  <div class="hero-content">
-    <h1>VibeXsmith Productions</h1>
-    <p>Where Vision Becomes Experience</p>
-    <a href="#contact" class="btn">Get in Touch</a>
-  </div>
-</section>
+<div class="admin-container">
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- HEADER -->
+    <div class="admin-header">
+        <h1>VibeXmith Admin</h1>
+
+        <input type="text" class="search-box" placeholder="Search requests..." onkeyup="filterRequests(this.value)">
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="admin-content">
+        <h2>Client Requests</h2>
+
+        {% if requests %}
+        <div class="request-list" id="requestList">
+
+            {% for req in requests %}
+            <div class="request-card">
+                <div class="card-header">
+                    <h3>{{ req.name }}</h3>
+                    <span>{{ req.time }}</span>
+                </div>
+
+                <p><strong>Phone:</strong> {{ req.phone }}</p>
+
+                {% if req.email %}
+                <p><strong>Email:</strong> {{ req.email }}</p>
+                {% endif %}
+
+                <p class="message">“{{ req.message }}”</p>
+
+                <a href="{{ url_for('delete', index=loop.index0) }}"
+                   class="delete-btn"
+                   onclick="return confirm('Delete this request?')">
+                    Delete
+                </a>
+            </div>
+            {% endfor %}
+
+        </div>
+        {% else %}
+            <p class="empty">No requests yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- SIMPLE SEARCH -->
+<script>
+function filterRequests(value) {
+    const cards = document.querySelectorAll('.request-card');
+    value = value.toLowerCase();
+
+    cards.forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(value)
+            ? 'block'
+            : 'none';
+    });
+}
+</script>
+
 </body>
 </html>
