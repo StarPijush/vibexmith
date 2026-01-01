@@ -172,5 +172,4 @@ def change_password():
 # Run App
 # ================================
 if __name__ == "__main__":
-    # debug=False for production
-    app.run(debug=False, host="0.0.0.0", port=5000)
+    app.run(debug=True)
