@@ -9,9 +9,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET")  # Use env in production
 
-DATA_FILE = os.path.join("data", "requests.json")
-ADMIN_FILE = os.path.join("data", "admin.json")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+DATA_FILE = os.path.join(BASE_DIR, "data", "requests.json")
+ADMIN_FILE = os.path.join(BASE_DIR, "data", "admin.json")
 
 # ================================
 # Helper Functions
@@ -172,4 +173,4 @@ def change_password():
 # Run App
 # ================================
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
